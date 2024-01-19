@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="dashboard.css" />
+    <script
+      src="https://kit.fontawesome.com/9a855d4630.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/backend/user.js"></script>
+    <script src="/backend/endpoint.js"></script>
+    <script src="dashboard.js" defer></script>
+
+    <script>
+      window.onload = function () {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          window.location.href = "login.html";
+        }
+      };
+    </script>
+    <title>Kakshya</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="nav">
+        <div class="icon">Kakshya</div>
+
+        <i class="fa-solid fa-user profile-section"></i>
+      </div>
+
+      <!-- Profile Modal -->
+      <dialog class="profile-modal">
+        <i class="fa-regular fa-user user-icon"></i>
+        <div class="username" id="username_field"></div>
+        <div class="user-email" id="email_field"></div>
+        <button onClick="logoutUser(event)" class="logout-btn">Logout</button>
+        <i class="fa-solid fa-xmark close-profile-modal"></i>
+      </dialog>
+
+      <div class="hero-btns">
+        <div class="create-btn">
+          <i class="fa-solid fa-microphone record-icon"></i>
+          <span class="record-text">Record</span>
+        </div>
+        <div class="add-btn">
+          <i class="fa-solid fa-arrow-up-from-bracket add-icon"></i>
+          <span class="add-text">Upload</span>
+        </div>
+      </div>
+
+      <div class="create-class">
+        <div class="create-class-title">Create a Class</div>
+        <form id="createClassForm">
+          <div class="create-class-title-wrapper">
+            <label for="title" class="create-class-subtitle">Title</label>
+            <input
+              type="text"
+              class="form-control text-input"
+              id="title"
+              placeholder="Enter title"
+            />
+          </div>
+          <div class="form-group">
+            <div class="create-class-description-wrapper">
+              <div class="create-class-description-wrapper-second">
+                <label for="description" class="create-class-subtitle"
+                  >Description</label
+                >
+                <textarea
+                  class="form-control text-input text-input-textarea"
+                  id="description"
+                  rows="2"
+                  placeholder="Enter description"
+                ></textarea>
+              </div>
+            </div>
+            <button type="submit" class="create-class-btn">Create</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="section-title">Classes</div>
+
+      <div id="classesList">
+        <!-- Classes list will be populated here by the JavaScript -->
+      </div>
+
+      <dialog class="record-modal">
+        <div class="record-wrap">
+          <div class="recorder-title">Record Audio</div>
+          <input
+            type="text"
+            class="upload-title"
+            placeholder="Title"
+            name="title"
+          /><br /><br />
+
+          <select name="class" class="class-select-record">
+            <option value="">Select class :</option>
+          </select>
+
+          <button class="record-btn" id="recordButton" type="button">
+            Start
+          </button>
+          <br /><br /><br />
+          <div id="timer">00:00</div>
+          <br /><br />
+          <button id="saveButton">Save</button>
+        </div>
+        <i class="fa-solid fa-xmark close-modal"></i>
+      </dialog>
+
+      <!-- Upload Modal -->
+      <dialog class="upload-modal">
+        <form id="uploadForm" onSubmit="uploadFile(event)">
+          <input
+            type="text"
+            class="upload-title"
+            placeholder="Enter Title"
+            name="title"
+            id="upload-popup"
+          />
+          <select name="class" class="class-select select-class-dropdown">
+            <option value="">Select class :</option>
+          </select>
+          <input type="file" class="upload-section" name="file" />
+
+          <div class="upload-btns-wrapper">
+            <button type="button" class="upload-cancel">Cancel</button>
+            <button type="submit" class="upload-btn">Upload</button>
+          </div>
+        </form>
+      </dialog>
+      <!-- Delete Modal -->
+      <dialog class="delete-modal">
+        <div class="delete-text">Are you sure you want to delete?</div>
+        <div class="delete-btns-wrapper">
+          <button type="btn" class="cancel-delete">Cancel</button>
+          <button type="btn" class="delete-final">Delete</button>
+        </div>
+      </dialog>
+
+      <div class="section-title">Recordings</div>
+
+      <p id="recordingList"></p>
+      <div class="recordings">
+        <!-- <div class="record hide-section">
+          <div class="record-visible">
+            <div class="record-title">Physics</div>
+            <div class="record-icons">
+              <i class="fa-regular fa-trash-can delete-btn"></i>
+              <span class="separator">|</span>
+              <i class="fa-solid fa-chevron-down dropdown-btn"></i>
+            </div>
+          </div>
+          <div class="record-info hide-record-info">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci
+            recusandae aliquam dicta minus assumenda sequi dolor eligendi veniam
+            mollitia pariatur odit facere quia iste ratione totam, neque maxime
+            illo. Architecto. Lorem ipsum dolor sit amet consectetur,
+            adipisicing elit. Vel esse quaerat modi tenetur quos alias nesciunt,
+            quasi velit laudantium consequatur sequi. Aspernatur itaque labore
+            deserunt quos doloribus, asperiores quibusdam quae!
+            <br /><br />
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam, sint
+            delectus eos sequi rem qui. Similique incidunt dolorum ut, adipisci
+            doloribus tempora, ab itaque dolore officia perspiciatis
+            consequuntur, facere illum!
+          </div>
+        </div>
+        <div class="record hide-section">
+          <div class="record-visible">
+            <div class="record-title">Algorithms and Neural Networks</div>
+            <div class="record-icons">
+              <i class="fa-regular fa-trash-can delete-btn"></i>
+              <span class="separator">|</span>
+              <i class="fa-solid fa-chevron-down dropdown-btn"></i>
+            </div>
+          </div>
+          <div class="record-info hide-record-info">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci
+            recusandae aliquam dicta minus assumenda sequi dolor eligendi veniam
+            mollitia pariatur odit facere quia iste ratione totam, neque maxime
+            illo. Architecto. Lorem ipsum dolor sit amet consectetur,
+            adipisicing elit. Vel esse quaerat modi tenetur quos alias nesciunt,
+            quasi velit laudantium consequatur sequi. Aspernatur itaque labore
+            deserunt quos doloribus, asperiores quibusdam quae!
+            <br /><br />
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam, sint
+            delectus eos sequi rem qui. Similique incidunt dolorum ut, adipisci
+            doloribus tempora, ab itaque dolore officia perspiciatis
+            consequuntur, facere illum!
+          </div>
+        </div>
+        <div class="record hide-section">
+          <div class="record-visible">
+            <div class="record-title">Simulation and Modelling</div>
+            <div class="record-icons">
+              <i class="fa-regular fa-trash-can delete-btn"></i>
+              <span class="separator">|</span>
+              <i class="fa-solid fa-chevron-down dropdown-btn"></i>
+            </div>
+          </div>
+          <div class="record-info hide-record-info">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci
+            recusandae aliquam dicta minus assumenda sequi dolor eligendi veniam
+            mollitia pariatur odit facere quia iste ratione totam, neque maxime
+            illo. Architecto. Lorem ipsum dolor sit amet consectetur,
+            adipisicing elit. Vel esse quaerat modi tenetur quos alias nesciunt,
+            quasi velit laudantium consequatur sequi. Aspernatur itaque labore
+            deserunt quos doloribus, asperiores quibusdam quae!
+            <br /><br />
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam, sint
+            delectus eos sequi rem qui. Similique incidunt dolorum ut, adipisci
+            doloribus tempora, ab itaque dolore officia perspiciatis
+            consequuntur, facere illum!
+          </div>
+        </div>
+        <div class="record hide-section">
+          <div class="record-visible">
+            <div class="record-title">Social Science and Politics</div>
+            <div class="record-icons">
+              <i class="fa-regular fa-trash-can delete-btn"></i>
+              <span class="separator">|</span>
+              <i class="fa-solid fa-chevron-down dropdown-btn"></i>
+            </div>
+          </div>
+          <div class="record-info hide-record-info">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci
+            recusandae aliquam dicta minus assumenda sequi dolor eligendi veniam
+            mollitia pariatur odit facere quia iste ratione totam, neque maxime
+            illo. Architecto. Lorem ipsum dolor sit amet consectetur,
+            adipisicing elit. Vel esse quaerat modi tenetur quos alias nesciunt,
+            quasi velit laudantium consequatur sequi. Aspernatur itaque labore
+            deserunt quos doloribus, asperiores quibusdam quae!
+            <br /><br />
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam, sint
+            delectus eos sequi rem qui. Similique incidunt dolorum ut, adipisci
+            doloribus tempora, ab itaque dolore officia perspiciatis
+            consequuntur, facere illum!
+          </div>
+        </div>
+        <div class="record hide-section">
+          <div class="record-visible">
+            <div class="record-title">Machine Learning and Data Science</div>
+            <div class="record-icons">
+              <i class="fa-regular fa-trash-can delete-btn"></i>
+              <span class="separator">|</span>
+              <i class="fa-solid fa-chevron-down dropdown-btn"></i>
+            </div>
+          </div>
+          <div class="record-info hide-record-info">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci
+            recusandae aliquam dicta minus assumenda sequi dolor eligendi veniam
+            mollitia pariatur odit facere quia iste ratione totam, neque maxime
+            illo. Architecto. Lorem ipsum dolor sit amet consectetur,
+            adipisicing elit. Vel esse quaerat modi tenetur quos alias nesciunt,
+            quasi velit laudantium consequatur sequi. Aspernatur itaque labore
+            deserunt quos doloribus, asperiores quibusdam quae!
+            <br /><br />
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam, sint
+            delectus eos sequi rem qui. Similique incidunt dolorum ut, adipisci
+            doloribus tempora, ab itaque dolore officia perspiciatis
+            consequuntur, facere illum!
+          </div>
+        </div>
+      </div> -->
+    </div>
+
+    <script src="/backend/audio.js"></script>
+  </body>
+</html>

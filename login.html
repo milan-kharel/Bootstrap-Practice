@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Oswald:wght@200;300;600;700&family=Poppins:wght@100;300;600;800;900&family=Roboto:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
+    <script src="login.js" defer></script>
+    <script src="/backend/endpoint.js"></script>
+    <script src="/backend/user.js"></script>
+    <script>
+      window.onload = function () {
+        const token = localStorage.getItem("token");
+        if (token) {
+          window.location.href = "dashboard.html";
+        }
+      };
+    </script>
+    <title>Kakshya</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="image-section">
+        <div class="hero-text-wrapper">
+          <p class="heading-text">Kakshya</p>
+          <p class="sub-text">Take smart notes</p>
+        </div>
+      </div>
+      <div class="login-section hide-section">
+        <div class="login-wrap">
+          <div class="login-text">Login</div>
+          <label id="response"></label>
+
+          <div class="form-wrapper">
+            <form method="POST" onSubmit="loginuser(event)">
+              <div class="input-wrapper">
+                <input
+                  type="text"
+                  placeholder="Username"
+                  name="email"
+                  class="input-field"
+                />
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  class="input-field"
+                />
+              </div>
+              <!-- <p class="remember-me"><input type="checkbox" name="rememberMe" id="rememberMe">&nbsp;Remember Me</p> -->
+              <div class="form-buttons">
+                <input type="submit" value="Sign In" class="signin-btn" />
+              </div>
+              <p class="signup-text">
+                Dont have an account yet?<a
+                  href="register.html"
+                  class="signup-redirect"
+                  >Sign Up.</a
+                >
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
